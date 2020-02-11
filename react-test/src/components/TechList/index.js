@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // import { Container } from './styles';
 
@@ -6,8 +6,19 @@ export default function TechList() {
   const [state, setState] = useState([]);
   const [text, setText] = useState("");
 
+  useEffect(() => {
+    const techs = localStorage.getItem("state");
+    if (techs) {
+      setState(JSON.parse(techs));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("state", JSON.stringify(state));
+  }, [state]);
+
   function handleClick() {
-    setState([...state, { id: Math.random(), name: text }]);
+    setState([...state, text]);
     setText("");
   }
 
@@ -24,7 +35,7 @@ export default function TechList() {
       </form>
       <ul data-testid="tech-list">
         {state.map(item => (
-          <li key={item.id}>{item.name}</li>
+          <li key={item}>{item}</li>
         ))}
       </ul>
     </div>
